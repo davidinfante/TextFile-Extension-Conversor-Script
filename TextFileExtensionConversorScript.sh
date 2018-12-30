@@ -13,6 +13,8 @@ INPUT_EXT=*lwp
 OUTPUT_EXT=doc
 # Directory of the files to convert
 DIRECTORY=./archivoslwp
+# True if /Escritos exists
+escr_exists=false
 
 
 # Script
@@ -24,7 +26,12 @@ for years in */; do
 
     # Loop for expedientes' folders
     for expedientes in */; do
-        cd $expedientes/Escritos
+        cd $expedientes
+        # Escritos folder check
+	    if [ -d Escritos ]; then
+		    cd Escritos
+           	escr_exists=true
+	    fi
 
         # Loop to convert files
         for filename in $INPUT_EXT; do
@@ -32,7 +39,11 @@ for years in */; do
             echo "$filename - converted"
         done
 
-        cd ..
+        if [ "$escr_exists" = true ]; then
+            cd ..
+            escr_exists=false
+        fi
+
         cd ..
     done
 
